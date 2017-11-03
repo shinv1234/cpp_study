@@ -1,0 +1,76 @@
+[upgrade.cpp]
+
+// this header is needed for NULL; normally it's included by 
+// other header files, but we don't need any other headers here.
+#include <cstddef>
+
+struct EnemySpaceShip 
+{
+	int x_coordinate;
+	int y_coordinate;
+	int weapon_power;
+	EnemySpaceShip* p_next_enemy;
+}; 
+
+EnemySpaceShip* getNewEnemy ()
+{
+	EnemySpaceShip* p_ship = new EnemySpaceShip;
+	p_ship->x_coordinate = 0;
+	p_ship->y_coordinate = 0;
+	p_ship->weapon_power = 20;
+	p_ship->p_next_enemy = NULL;
+	return p_ship;
+}
+
+void upgradeWeapons (EnemySpaceShip* p_ship)
+{
+	p_ship->weapon_power += 10;
+}
+
+int main ()
+{
+	EnemySpaceShip* p_enemy = getNewEnemy();
+	upgradeWeapons( p_enemy );
+}
+
+
+[vote.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	int votes[ 10 ];
+
+	// make sure the election isn't rigged (by clearing out the array)
+	for ( int i = 0; i < 10; ++i )
+	{
+		votes[ i ] = 0;
+	}
+
+	int candidate;
+	cout << "Vote for the candidate of your choice, using numbers: 0) Joe 1) Bob 2) Mary 3) Suzy 4) Margaret 5) Eleanor 6) Alex 7) Thomas 8) Andrew 9) Ilene" << '\n';
+	cin >> candidate;
+	
+	// enter votes until the user exits by entering a non-candidate number
+	while ( 0 <= candidate && candidate <= 9 )
+	{
+		// notice that we can't use a do-while loop because we need to
+		// check that the candidate is in the right range before
+		// updating the array. A do-while loop would require reading in 
+		// the candidate value, then checking it, then incrementing the 
+		// vote.
+		votes[ candidate ]++;
+		cout << "Please enter another vote: ";
+		cin >> candidate;
+	}
+	// display the votes
+	for ( int i = 0; i < 10; ++i )
+	{
+		cout << votes[ i ] << '\n';
+	}
+}
+
+

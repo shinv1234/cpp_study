@@ -1,0 +1,381 @@
+[ifstream.cpp]
+
+#include <fstream>
+
+using namespace std;
+int main ()
+{
+	ifstream file_reader( "myfile.txt" );
+}
+
+
+[ifstream_error_checking.cpp]
+
+#include <fstream>
+#include <iostream>
+
+
+using namespace std;
+int main ()
+{
+	ifstream file_reader( "myfile.txt" );
+	if ( ! file_reader.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+	}
+}
+
+
+[read_file.cpp]
+
+#include <fstream>
+#include <iostream>
+
+
+using namespace std;
+int main ()
+{
+	ifstream file_reader( "myfile.txt" );
+	if ( ! file_reader.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+	}
+	int number;
+	file_reader >> number;
+}
+
+
+[read_error_checking.cpp]
+
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+int main ()
+{
+	ifstream file_reader( "myfile.txt" );
+	if ( ! file_reader.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+	}
+	int number;
+	// here, we're checking if reading in an integer succeeded or not
+	if ( file_reader >> number )
+	{
+		cout << "The value is: " << number;
+	}
+}
+
+
+[highscore.cpp]
+
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+int main ()
+{
+	ifstream file_reader( "highscores.txt" );
+	if ( ! file_reader.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+	}
+	vector<int> scores;
+	for ( int i = 0; i < 10; i++ )
+	{
+		int score;
+		file_reader >> score;
+		scores.push_back( score );
+	}
+}
+
+
+[highscore_eof.cpp]
+
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main ()
+{
+	ifstream file_reader( "myfile.txt" );
+	if ( ! file_reader.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+	}
+	vector<int> scores;
+	for ( int i = 0; i < 10; i++ )
+	{
+		
+		int score;
+		if ( ! ( file_reader >> score ) )
+		{
+			break;
+		}
+
+		scores.push_back( score );
+	}
+}
+
+
+[ofstream.cpp]
+
+#include <fstream>
+#include <iostream>
+#include <cstdlib>
+
+using namespace std;
+
+int main ()
+{
+	ofstream file_writer( "highscores.txt" );
+	if ( ! file_writer.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+		return 0;
+	}
+
+	// since we don't have any real scores, we'll output the numbers 10 to 1
+	for ( int i = 0; i < 10; i++ )
+	{
+		file_writer << 10 - i << '\n';
+	}
+}
+
+
+[file_position.cpp]
+
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main ()
+{
+	fstream file ( "highscores.txt", ios::in | ios::out );
+	if ( ! file.is_open() )
+	{
+		cout << "Could not open file!" << '\n';
+		return 0;
+	}
+	int new_high_score;
+	cout << "Enter a new high score: ";
+	cin >> new_high_score;
+
+	// the while loop below searches the file until it finds a value
+	// less than the current high score; at this point, we know we
+	// want to insert our high score right before that value. To make
+	// sure that we know the right position, we keep track of the
+	// position prior to the current score; the pre_score_pos
+	streampos pre_score_pos = file.tellg();
+	int cur_score;
+	while ( file >> cur_score )
+	{
+		if ( cur_score < new_high_score )
+		{
+			break;
+		}
+		pre_score_pos = file.tellg();
+	}
+
+	// if fail is true, and we aren't at eof, there was some bad input
+	if ( file.fail() && ! file.eof() )
+	{
+		cout << "Bad score/read--exiting";
+		return 0;
+	}
+	// without calling clear, we won't be able to write to the file if
+	// we hit eof
+	file.clear();
+
+	// return to the point right before the last score we read, for reading
+	// so that we can read in all the scores that are less than our
+	// high score, and move them one position later in the file
+	file.seekg( pre_score_pos );
+
+	// now we will read in all the scores, starting with the one we
+	// previously read in
+	vector<int> scores;
+	while ( file >> cur_score )
+	{
+		scores.push_back( cur_score );
+	}
+	// we expect to reach the end of file via this read loop because we
+	// want to read in all scores in the file
+	if ( ! file.eof() )
+	{
+		cout << "Bad score/read--exiting";
+		return 0;
+	}
+	// since we hit eof, we need to clear the file again so that we can
+	// write to it
+	file.clear();
+
+	// seek back to the position we want to do our insert
+	file.seekp( pre_score_pos );
+	// if we are not writing to the beginning of the file, we need to
+	// include a newline. The reason is that when a number is read in
+	// it stops at the first whitepsace, so the position we are at
+	// prior to writing is at the end of the number rather than
+	// at the start of the next line
+	if ( pre_score_pos != std::streampos(0) )
+	{
+		file << endl;
+	}
+	// write out our new high score
+	file << new_high_score << endl;
+	// loop through the rest of the scores, outputting all of them
+	for ( vector<int>::iterator itr = scores.begin(); itr != scores.end(); ++itr )
+	{
+		file << *itr << endl;
+	}
+}
+
+
+[cat.cpp]
+
+// the name of this program comes from the unix utility cat, which displays
+// a file to the screen
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+int main (int argc, char *argv[])
+{
+	// argc should be 2 for correct execution, the program name
+	// and the filename
+
+	if ( argc != 2 ) 
+	{
+		// when printing out usage instructions, you can use
+		// argv[ 0 ] as the file name
+		cout << "usage: " << argv[ 0 ] << " <filename>" << endl;
+	}
+	else 
+	{
+		// We assume argv[ 1 ] is a filename to open
+		ifstream the_file( argv[ 1 ] );
+		// Always check to see if file opening succeeded
+		if ( ! the_file.is_open() )
+		{
+			cout << "Could not open file " << argv[ 1 ] << endl;
+			return 1;
+		}
+	
+		char x;
+		// the_file.get( x ) reads the next character from the file
+		// into x, and returns false if the end of the file is hit
+		// or if an error occurs
+		while ( the_file.get( x ) )
+		{
+			cout << x;
+		}
+	} // the_file is closed implicitly here by its destructor
+}
+
+
+[atoi.cpp]
+
+#include <cstdlib>
+#include <iostream>
+
+using namespace std;
+int main (int argc, char *argv[])
+{
+	if ( argc != 2 ) 
+	{
+		// when printing out usage instructions, you can use
+		// argv[ 0 ] as the file name
+		cout << "usage: " << argv[ 0 ] << " <number>" << endl;
+	}
+	else
+	{
+		int val = atoi( argv[ 1 ] );
+		cout << val * val;
+	}
+	return 0;
+}
+
+
+[binary.cpp]
+
+#include <fstream>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+struct PlayerRecord
+{
+	int age;
+	int score;
+	string name;
+};
+
+int main ()
+{
+	PlayerRecord rec;
+	rec.age = 11;
+	rec.score = 200;
+	rec.name = "John";
+
+	fstream a_file( "records.bin", ios::trunc | ios::binary | ios::in | ios::out );
+
+	a_file.write( reinterpret_cast<char*>( & rec.age ), sizeof( rec.age ) );
+	a_file.write(reinterpret_cast<char*>(  & rec.score ), sizeof( rec.score ) );
+
+	int len = rec.name.length();
+	a_file.write(reinterpret_cast<char*>( & len ), sizeof( len ) );
+
+	a_file.write( rec.name.c_str(), rec.name.length() + 1 );
+
+	PlayerRecord in_rec;
+
+	a_file.seekg( 0, ios::beg );
+	if ( ! a_file.read( reinterpret_cast<char*>( & in_rec.age ), sizeof( in_rec.age ) ) )
+	{
+		cout << "Error reading from file" << endl;
+		return 1;
+	}
+	if ( ! a_file.read( reinterpret_cast<char*>(& in_rec.score ), sizeof( in_rec.score ) ) )
+	{
+		cout << "Error reading from file" << endl;
+		return 1;
+	}
+
+	int str_len;
+
+	if ( ! a_file.read( reinterpret_cast<char*>( & str_len ), sizeof( str_len ) ) )
+	{
+		cout << "Error reading from file" << endl;
+		return 1;
+	}
+
+	// perform a sanity check to ensure we don't try to allocate too much
+	// memory!
+	if ( str_len > 0 && str_len < 10000 )
+	{
+		char *p_str_buf = new char[ str_len + 1 ];
+		if ( ! a_file.read( p_str_buf, str_len + 1 ) ) // + 1 for null terminator
+		{
+			delete[] p_str_buf;
+			cout << "Error reading from file" << endl;
+			return 1;
+		}
+		// validate that the string is null-terminated
+		if ( p_str_buf[ str_len ] == 0 )
+		{
+			in_rec.name = string( p_str_buf );
+		}
+		delete[] p_str_buf;
+	}
+
+	cout << in_rec.age << " " <<in_rec.score << " " << in_rec.name << endl;
+}
+
+

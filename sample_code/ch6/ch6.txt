@@ -1,0 +1,107 @@
+[add_function.cpp]
+
+#include <iostream>   // needed for cout
+
+using namespace std;
+
+int add (int x, int y)
+{
+	return x + y;
+} 
+
+int main ()
+{
+	int result = add( 1, 2 );  // call add and assign the result to a variable
+	cout << "The result is: " << result << '\n';
+	cout << "Adding 3 and 4 gives us: " << add( 3, 4 );
+}
+
+
+[local_variable.cpp]
+
+#include <iostream>
+
+using namespace std;
+void changeArgument (int x)
+{
+	x = x + 5;
+}
+
+int main()
+{
+	int y = 4;
+	changeArgument( y ); // y will be unharmed by the function call
+	cout << y; // still prints 4
+}
+
+
+[global_variable.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int doStuff () // just a small function to demonstrate scope
+{
+	return 2 + 3;
+}
+
+// global variables can be initialized just like other variables
+int count_of_function_calls = 0;
+
+void fun ()
+{
+	// and the global variable is available here
+	count_of_function_calls++;
+}
+int main ()
+{
+	fun();
+	fun();
+	fun();
+	// and here!
+	cout << "Function fun was called " << count_of_function_calls << " times";
+}
+
+
+[badcode.cpp]
+
+#include <iostream>   // needed for cout
+
+using namespace std;
+
+int main ()
+{
+	int result = add( 1, 2 );
+	cout << "The result is: " << result << '\n';
+	cout << "Adding 3 and 4 gives us: " << add( 3, 4 );
+}
+
+int add (int x, int y)
+{
+	return x + y;
+}
+
+
+[function_prototype.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+// function prototype for add
+int add (int x, int y);
+
+int main ()
+{
+	int result = add( 1, 2 );
+	cout << "The result is: " << result << '\n';
+	cout << "Adding 3 and 4 gives us: " << add( 3, 4 );
+}
+
+int add (int x, int y)
+{
+	return x + y;
+}
+
+

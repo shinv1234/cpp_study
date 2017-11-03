@@ -1,0 +1,136 @@
+[constructor.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+class Foo // Foo is a common placeholder name in computer programming
+{
+	public:
+	Foo () { cout << "Foo's constructor" << endl; }
+};
+
+class Bar : public Foo
+{
+	public:
+	Bar () { cout << "Bar's constructor" << endl; }
+};
+
+int main ()
+{
+	// a lovely elephant ;)
+	Bar bar;
+}
+
+
+[destructor.cpp]
+
+class Drawable
+{
+public:
+	virtual void draw () = 0;
+};
+
+class MyDrawable : public Drawable
+{
+public:
+	virtual void draw ();
+	MyDrawable ();
+	~MyDrawable ();
+
+private:
+	int *_my_data;
+};
+
+MyDrawable::MyDrawable ()
+{
+	_my_data = new int;
+}
+
+MyDrawable::~MyDrawable ()
+{
+	delete _my_data;
+}
+
+void MyDrawable::draw ()
+{
+	/* code to do the drawing */
+}
+
+void deleteDrawable (Drawable *drawable)
+{
+	delete drawable;
+}
+
+int main ()
+{
+	deleteDrawable( new MyDrawable() );
+}
+
+
+[inherit_destructor.cpp]
+
+class Drawable
+{
+public:
+	virtual void draw () = 0;
+};
+
+class  MyDrawable : public Drawable
+{
+	public:
+	virtual void draw ();
+	MyDrawable ();
+	// Note: to make this work correctly, this must be virtual!
+	/* virtual */ ~MyDrawable ();
+
+private:
+	int *_my_data; 
+};
+
+MyDrawable::MyDrawable ()
+{
+	_my_data = new int;
+}
+
+MyDrawable::~MyDrawable ()
+{
+	delete _my_data;
+}
+
+void deleteDrawable (Drawable *drawable)
+{
+	delete drawable;
+}
+
+int main ()
+{
+	deleteDrawable( new MyDrawable() );
+}
+
+
+[slice.cpp]
+
+class Superclass
+{
+public:
+	// note that since we are declaring the copy constructor we now
+	// need to provide our own default constructor
+	Superclass () {}
+private:
+	// prohibited, we will not define this method
+	Superclass (const Superclass& other);
+};
+
+class Subclass : public Superclass
+{
+	int val;
+};
+
+int main ()
+{
+	Subclass sub;
+	Superclass super = sub; // now this line of code causes a compilation error
+}
+
+

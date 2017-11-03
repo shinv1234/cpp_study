@@ -1,0 +1,87 @@
+[getline.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main ()
+{
+	string input;
+	cout << "Please enter a line of text: ";
+	getline( cin, input, '\n' );
+	cout << "You typed in the line " << '\n' << input;
+}
+
+
+[csv.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+ 
+int main ()
+{
+	while ( 1 )
+	{
+		string first_name;
+		getline( cin, first_name, ',' );
+
+		if ( first_name.size() == 0 )
+		{
+			break;
+		}
+		string last_name;
+		getline( cin, last_name, ',' );
+
+		string player_class;
+		getline( cin, player_class, '\n' );
+		cout << first_name << " " << last_name << " is a " << player_class << endl;
+	}
+}
+
+
+[search.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main ()
+{
+	string input;
+	int i = 0;
+	int cat_appearances = 0;
+
+	cout << "Please enter a line of text: ";
+	getline( cin, input, '\n' );
+
+	for ( i = input.find( "cat", 0 ); i != string::npos; i = input.find( "cat", i ) )
+{
+		cat_appearances++;
+		i++;  // Move past the last discovered instance to avoid 
+			// finding same string again
+	}
+
+	cout << "The word cat appears " << cat_appearances << " in the string " << '"' << input << '"';
+}
+
+
+[first_ten.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main ()
+{
+	string my_string = "abcdefghijklmnop";
+	string first_ten_of_alphabet = my_string.substr( 0, 10 );
+	cout << "The first ten letters of the alphabet are "
+	     << first_ten_of_alphabet;
+}
+
+

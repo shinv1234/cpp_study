@@ -1,0 +1,110 @@
+[while.cpp]
+
+#include <iostream>
+
+using namespace std; // So we can see cout and endl
+
+int main ()
+{ 
+	int x = 0;  // Don't forget to declare variables
+  
+	while ( x < 10 ) // While x is less than 10 
+	{ 
+		cout << x << '\n';
+		x++;             // Update x so the condition can be met eventually
+	}
+}
+
+
+
+[for.cpp]
+
+#include <iostream>
+
+using namespace std; 
+
+int main ()
+{
+	// The loop goes while x < 10, and x increases by one every loop
+	for ( int x = 0; x < 10; x++ ) 
+	{
+		// Keep in mind that the loop condition checks 
+		// the conditional statement before it loops again.
+		// consequently, when x equals 10 the loop breaks.
+		// x is updated before the condition is checked.    
+		cout<< x << " squared is " << x * x << endl;
+	}
+}
+
+
+[dowhile.cpp]
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	string password;
+	do
+	{
+		cout << "Please enter your password: ";
+		cin >> password;
+	} while ( password != "foobar" );
+	cout << "Welcome, you got the password right";
+}
+
+
+[break.cpp]
+
+#include <string>
+#include <iostream>
+
+using namespace std;
+ 
+int main ()
+{
+	string password;
+	while ( 1 )
+	{
+		cout << "Please enter your password: ";
+		cin >> password;
+		if ( password == "foobar" )
+		{
+			break;
+		}
+	}
+	cout << "Welcome, you got the password right";
+}
+
+
+
+[nested_loops.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	for ( int x = 0; x < 10; ++x )
+	{
+		cout << '\t' << x; // \t represents a tab character, which will format our output nicely
+	}
+
+	cout << '\n';
+
+	for ( int i = 0; i < 10; ++i )
+	{
+		cout << i;
+		
+		for ( int j = 0; j < 10; ++j )
+		{
+			cout << '\t' << i * j;
+		}
+		cout << '\n';
+	}
+}
+
+

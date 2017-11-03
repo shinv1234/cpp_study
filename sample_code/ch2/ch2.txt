@@ -1,0 +1,25 @@
+[hello.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	cout << "HEY, you, I'm alive! Oh, and Hello World!\n";
+	cin.get();
+}
+
+
+[hello_comment.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+//	cout << "HEY, you, I'm alive! Oh, and Hello World!\n";
+}
+
+

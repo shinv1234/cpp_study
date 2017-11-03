@@ -1,0 +1,124 @@
+[variable.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	int x;
+	cout << "Enter a number: ";
+	cin >> x;
+	if ( x < 10 )
+	{
+		cout << "You entered a value less than 10" << '\n';
+	}
+}
+
+
+[non_negative.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int num;
+	cout << "Enter a number: ";
+	cin >> num;
+	if ( num < 0 ) 
+	{
+		cout << "You entered a negative number\n";
+	}
+	else
+	{
+		cout << "You entered a positive number\n";
+	}
+}
+
+
+[else_if.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int num;
+	cout << "Enter a number: ";
+	cin >> num;
+	if ( num < 0 ) 
+	{
+		cout << "You entered a negative number\n";
+	}
+	else if ( num == 0 )
+	{
+		cout << "You entered zero\n";
+	}
+	else
+	{
+		cout << "You entered a positive number\n";
+	}
+}
+
+
+
+[password.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main ()
+{
+	string password;
+
+	cout << "Enter your password: " << "\n";
+	getline( cin, password, '\n' );
+	if ( password == "xyzzy" )
+	{
+		cout << "Access allowed" << "\n";
+	}
+	else
+	{
+		cout << "Bad password. Denied access!" << "\n";
+		return 0;
+	}
+	// continue onward!
+}
+
+
+
+[username_password.cpp]
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main ()
+{
+	string username;
+	string password;
+	cout << "Enter your username: " << "\n";
+	getline( cin, username, '\n' );
+
+	cout << "Enter your password: " << "\n";
+	getline( cin, password, '\n' );
+	if ( username == "root" && password == "xyzzy" )
+	{
+		cout << "Access allowed" << "\n";
+	}
+	else
+	{
+		cout << "Bad username or password. Denied access!" << "\n";
+		// returning is a convenient way to stop the program
+		return 0;
+	}
+	// continue onward!
+}
+
+

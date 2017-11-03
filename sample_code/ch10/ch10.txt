@@ -1,0 +1,156 @@
+[multidimensional_array.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	int array[ 8 ][ 8 ]; // Declares an array that looks like a chessboard
+  
+	for ( int i = 0; i < 8; i++ ) 
+	{
+		for ( int j = 0; j < 8; j++ )
+		{
+			array[ i ][ j ] = i * j; // Set each element to a value
+		}
+	}
+	cout << "Multiplication table:\n";
+	for ( int i = 0; i < 8; i++ ) 
+	{
+		for ( int j = 0; j < 8; j++ )
+		{
+			cout << "[ "<< i <<" ][ "<< j <<" ] = ";
+			cout << array[ i ][ j ] <<" ";
+			cout << "\n";
+		}
+	}
+}
+
+
+[sum_array.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int sumArray (int values[], int size)
+{
+	int sum = 0;
+	// this array stops when i == size. Why? The last element is size - 1
+	for ( int i = 0; i < size; i++ ) 
+	{
+		sum += values[ i ];
+	}
+	return sum;
+}
+
+int main ()
+{
+	int values[ 10 ];
+	for ( int i = 0; i < 10; i++ )
+	{
+		cout << "Enter value " << i << ": ";
+		cin >> values[ i ];
+	} 
+	cout << sumArray( values, 10 ) << endl;
+}
+
+
+[read_ints.cpp]
+
+#include <iostream>
+
+using namespace std;
+
+int main ()
+{
+	int values[ 100 ];
+	for ( int i = 0; i < 100; i++ )
+	{
+		cout << "Enter value " << i << ": ";
+		cin >> values[ i ];
+	}
+}
+
+
+[insertion_sort.cpp]
+
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+
+using namespace std;
+
+int findSmallestRemainingElement (int array[], int size, int index);
+void swap (int array[], int first_index, int second_index);
+
+void sort (int array[], int size)
+{
+	for ( int i = 0; i < size; i++ )
+	{
+		int index = findSmallestRemainingElement( array, size, i );
+		swap( array, i, index );
+	}
+}
+
+int findSmallestRemainingElement (int array[], int size, int index)
+{
+	int index_of_smallest_value = index;
+	for (int i = index + 1; i < size; i++)
+	{
+		if ( array[ i ] < array[ index_of_smallest_value ]  )
+		{
+			index_of_smallest_value = i;
+		}
+	}
+	return index_of_smallest_value;
+}
+
+
+void swap (int array[], int first_index, int second_index)
+{
+	int temp = array[ first_index ];
+	array[ first_index ] = array[ second_index ];
+	array[ second_index ] = temp;
+}
+
+// small helper method to display the before and after arrays
+void displayArray (int array[], int size)
+{
+	cout << "{";
+	for ( int i = 0; i < size; i++ )
+	{
+		// you'll see this pattern a lot for nicely formatting
+		// lists--check if we're past the first element, and
+		// if so, append a comma 
+		if ( i != 0 )
+		{
+			cout << ", ";
+		}
+		cout << array[ i ];
+	}
+	cout << "}";
+}
+
+int main ()
+{
+	int array[ 10 ];
+	srand( time( NULL ) ); 
+	for ( int i = 0; i < 10; i++ )
+	{
+		// keep the numbers small so they're easy to read
+		array[ i ] = rand() % 100;
+	}
+	cout << "Original array: ";
+	displayArray( array, 10 );
+	cout << '\n';
+
+	sort( array, 10 );
+
+	cout << "Sorted array: ";
+	displayArray( array, 10 );
+	cout << '\n';
+}
+
+
